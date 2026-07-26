@@ -24,7 +24,10 @@ def _():
         construir_sistema,
         generar_topologia,
     )
-    from estudis_web import estudiar_entorn_punt
+    from estudis_web import (
+        estudi_referencia_precalculat,
+        estudiar_entorn_punt,
+    )
     from visualitzacio_web import (
         crear_figura_resultats,
         crear_figures_entorn,
@@ -35,6 +38,7 @@ def _():
         construir_sistema,
         crear_figura_resultats,
         crear_figures_entorn,
+        estudi_referencia_precalculat,
         estudiar_entorn_punt,
         generar_topologia,
         inspect,
@@ -388,9 +392,10 @@ def _(mo):
            mantenint la geometria;
         2. una superfície 3D variant files i columnes, mantenint \(\Delta H\).
 
-        L'amplitud del salt i el radi de la malla es poden modificar. El càlcul
-        només comença en prémer el botó, perquè implica resoldre diverses
-        xarxes completament al navegador.
+        En obrir la pàgina es mostren immediatament els resultats precalculats
+        del cas de referència 10 × 14. L'amplitud del salt i el radi de la
+        malla es poden modificar; en prémer el botó, els gràfics es recalculen
+        al navegador al voltant del punt seleccionat al formulari principal.
         """
     )
     return
@@ -427,41 +432,42 @@ def _(mo):
 
 @app.cell
 def _(
+    estudi_referencia_precalculat,
     estudiar_entorn_punt,
     formulari_estudi,
     mo,
     parametres_web,
 ):
-    mo.stop(
-        formulari_estudi.value is None,
-        mo.callout(
-            "Premeu «Calcula l'estudi paramètric» per explorar l'entorn "
-            "del punt de funcionament seleccionat.",
-            kind="info",
-        ),
-    )
-    configuracio_estudi = formulari_estudi.value
-    mo.output.replace(
-        mo.callout(
-            "Resolent els casos de l'estudi paramètric al navegador…",
-            kind="info",
+    if formulari_estudi.value is None:
+        estudi_entorn = estudi_referencia_precalculat()
+        origen_estudi = (
+            "Resultats precalculats del cas de referència 10 × 14, "
+            "amb ΔH = 1 m."
         )
-    )
-    estudi_entorn = estudiar_entorn_punt(
-        files=int(parametres_web["files"]),
-        columnes=int(parametres_web["columnes"]),
-        salt_m=float(parametres_web["salt_h"]),
-        altura_canal_mm=float(parametres_web["altura"]),
-        coeficient_cel_lular_k=float(parametres_web["k"]),
-        exponent_cel_lular_n=float(parametres_web["n"]),
-        amplitud_salt_percent=float(configuracio_estudi["amplitud"]),
-        radi_dimensions=int(configuracio_estudi["radi"]),
-    )
-    return (estudi_entorn,)
+    else:
+        configuracio_estudi = formulari_estudi.value
+        mo.output.replace(
+            mo.callout(
+                "Resolent els casos de l'estudi paramètric al navegador…",
+                kind="info",
+            )
+        )
+        estudi_entorn = estudiar_entorn_punt(
+            files=int(parametres_web["files"]),
+            columnes=int(parametres_web["columnes"]),
+            salt_m=float(parametres_web["salt_h"]),
+            altura_canal_mm=float(parametres_web["altura"]),
+            coeficient_cel_lular_k=float(parametres_web["k"]),
+            exponent_cel_lular_n=float(parametres_web["n"]),
+            amplitud_salt_percent=float(configuracio_estudi["amplitud"]),
+            radi_dimensions=int(configuracio_estudi["radi"]),
+        )
+        origen_estudi = "Resultats recalculats al navegador."
+    return estudi_entorn, origen_estudi
 
 
 @app.cell
-def _(crear_figures_entorn, estudi_entorn, mo):
+def _(crear_figures_entorn, estudi_entorn, mo, origen_estudi):
     figura_salt, figura_superficie = crear_figures_entorn(estudi_entorn)
     totes_convergeixen = all(estudi_entorn.convergencies_salt) and all(
         valor
@@ -473,6 +479,8 @@ def _(crear_figures_entorn, estudi_entorn, mo):
             mo.md(
                 f"""
                 ### Resultats de l'estudi local
+
+                **{origen_estudi}**
 
                 El punt vermell és el cas seleccionat al formulari principal.
                 Tots els casos han convergit: **{'sí' if totes_convergeixen else 'no'}**.
@@ -491,6 +499,7 @@ def _(
     construir_sistema,
     crear_figura_resultats,
     crear_figures_entorn,
+    estudi_referencia_precalculat,
     estudiar_entorn_punt,
     generar_topologia,
     inspect,
@@ -507,6 +516,7 @@ def _(
         ),
         ("construir_sistema", construir_sistema),
         ("avaluar_xarxa", avaluar_xarxa),
+        ("estudi_referencia_precalculat", estudi_referencia_precalculat),
         ("estudiar_entorn_punt", estudiar_entorn_punt),
         ("crear_figura_resultats", crear_figura_resultats),
         ("crear_figures_entorn", crear_figures_entorn),

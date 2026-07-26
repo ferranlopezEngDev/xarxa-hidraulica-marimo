@@ -24,6 +24,41 @@ class EstudiEntorn:
     convergencies_dimensions: tuple[tuple[bool, ...], ...]
 
 
+def estudi_referencia_precalculat() -> EstudiEntorn:
+    """Retorna el mateix estudi 10×14 mostrat a la llibreta estàtica."""
+    cabals_dimensions = (
+        (3941.269415, 3996.232165, 4040.613858, 4076.261661, 4104.615443),
+        (3889.394708, 3935.896297, 3973.506880, 4003.737940, 4027.757579),
+        (3827.579445, 3866.025829, 3897.150858, 3922.156227, 3941.971831),
+        (3756.320294, 3791.459443, 3819.921173, 3842.792527, 3860.912007),
+        (3687.998203, 3720.437570, 3746.901788, 3768.227169, 3785.091172),
+    )
+    return EstudiEntorn(
+        files_centre=10,
+        columnes_centre=14,
+        salt_centre_m=1.0,
+        cabal_centre_mm3_s=3897.150858,
+        salts_m=(0.6, 0.8, 0.9, 1.0, 1.1, 1.2, 1.4),
+        cabals_salt_mm3_s=(
+            2959.831440,
+            3449.462435,
+            3677.798566,
+            3897.150858,
+            4105.933723,
+            4310.618205,
+            4695.349023,
+        ),
+        convergencies_salt=(True,) * 7,
+        files=(8, 9, 10, 11, 12),
+        columnes=(12, 13, 14, 15, 16),
+        cabals_dimensions_mm3_s=cabals_dimensions,
+        convergencies_dimensions=tuple(
+            tuple(True for _ in range(5))
+            for _ in range(5)
+        ),
+    )
+
+
 def estudiar_entorn_punt(
     *,
     files: int,
