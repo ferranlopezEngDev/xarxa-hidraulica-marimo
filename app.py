@@ -24,12 +24,18 @@ def _():
         construir_sistema,
         generar_topologia,
     )
-    from visualitzacio_web import crear_figura_resultats
+    from estudis_web import estudiar_entorn_punt
+    from visualitzacio_web import (
+        crear_figura_resultats,
+        crear_figures_entorn,
+    )
 
     return (
         avaluar_xarxa,
         construir_sistema,
         crear_figura_resultats,
+        crear_figures_entorn,
+        estudiar_entorn_punt,
         generar_topologia,
         inspect,
         mo,
@@ -365,10 +371,122 @@ def _(mo):
 
 
 @app.cell
+def _(mo):
+    mo.md(
+        r"""
+        ## 7. Comportament al voltant del punt de funcionament
+
+        El resultat anterior es pren com a **punt central**. Igual que a
+        l'exemple estàtic, es fan dos estudis:
+
+        1. set valors de \(\Delta H\) al voltant del valor seleccionat,
+           mantenint la geometria;
+        2. una superfície 3D variant files i columnes, mantenint \(\Delta H\).
+
+        L'amplitud del salt i el radi de la malla es poden modificar. El càlcul
+        només comença en prémer el botó, perquè implica resoldre diverses
+        xarxes completament al navegador.
+        """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    controls_estudi = mo.ui.dictionary(
+        {
+            "amplitud": mo.ui.number(
+                start=10,
+                stop=80,
+                step=5,
+                value=40,
+                label="Variació de ΔH a cada costat [%]",
+            ),
+            "radi": mo.ui.number(
+                start=1,
+                stop=3,
+                step=1,
+                value=2,
+                label="Variació de files i columnes [±]",
+            ),
+        },
+        label="Entorn del punt de funcionament",
+    )
+    formulari_estudi = controls_estudi.form(
+        submit_button_label="Calcula l'estudi paramètric",
+        bordered=True,
+    )
+    formulari_estudi
+    return (formulari_estudi,)
+
+
+@app.cell
+def _(
+    estudiar_entorn_punt,
+    formulari_estudi,
+    mo,
+    parametres_web,
+):
+    mo.stop(
+        formulari_estudi.value is None,
+        mo.callout(
+            "Premeu «Calcula l'estudi paramètric» per explorar l'entorn "
+            "del punt de funcionament seleccionat.",
+            kind="info",
+        ),
+    )
+    configuracio_estudi = formulari_estudi.value
+    mo.output.replace(
+        mo.callout(
+            "Resolent els casos de l'estudi paramètric al navegador…",
+            kind="info",
+        )
+    )
+    estudi_entorn = estudiar_entorn_punt(
+        files=int(parametres_web["files"]),
+        columnes=int(parametres_web["columnes"]),
+        salt_m=float(parametres_web["salt_h"]),
+        altura_canal_mm=float(parametres_web["altura"]),
+        coeficient_cel_lular_k=float(parametres_web["k"]),
+        exponent_cel_lular_n=float(parametres_web["n"]),
+        amplitud_salt_percent=float(configuracio_estudi["amplitud"]),
+        radi_dimensions=int(configuracio_estudi["radi"]),
+    )
+    return (estudi_entorn,)
+
+
+@app.cell
+def _(crear_figures_entorn, estudi_entorn, mo):
+    figura_salt, figura_superficie = crear_figures_entorn(estudi_entorn)
+    totes_convergeixen = all(estudi_entorn.convergencies_salt) and all(
+        valor
+        for fila in estudi_entorn.convergencies_dimensions
+        for valor in fila
+    )
+    mo.vstack(
+        [
+            mo.md(
+                f"""
+                ### Resultats de l'estudi local
+
+                El punt vermell és el cas seleccionat al formulari principal.
+                Tots els casos han convergit: **{'sí' if totes_convergeixen else 'no'}**.
+                """
+            ),
+            figura_salt,
+            figura_superficie,
+        ]
+    )
+    return
+
+
+@app.cell
 def _(
     avaluar_xarxa,
     construir_sistema,
     crear_figura_resultats,
+    crear_figures_entorn,
+    estudiar_entorn_punt,
     generar_topologia,
     inspect,
     mo,
@@ -384,7 +502,9 @@ def _(
         ),
         ("construir_sistema", construir_sistema),
         ("avaluar_xarxa", avaluar_xarxa),
+        ("estudiar_entorn_punt", estudiar_entorn_punt),
         ("crear_figura_resultats", crear_figura_resultats),
+        ("crear_figures_entorn", crear_figures_entorn),
     )
     blocs_codi = []
     for nom_funcio, funcio in funcions_documentades:

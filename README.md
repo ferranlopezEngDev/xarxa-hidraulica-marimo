@@ -13,6 +13,12 @@ Python.
 - coeficient `K` dels canals verds;
 - exponent `n` dels canals verds.
 
+La mateixa aplicació també calcula l'entorn del punt de funcionament:
+
+- corba de cabal variant `ΔH`;
+- superfície 3D variant files i columnes;
+- amplitud de l'estudi configurable.
+
 El cas inicial reprodueix la xarxa proporcionada de 10 × 14 cel·les.
 
 ## Prova local
@@ -60,6 +66,7 @@ automàticament.
 - `channel_connections.py`: adaptació de les connexions rectangulars i KQⁿ.
 - `network_image_data.py`: dades transcrites del cas original.
 - `visualitzacio_web.py`: gràfics, separats de l'exemple d'ús.
+- `estudis_web.py`: estudi paramètric al voltant del punt seleccionat.
 - `hn3ttk/`: còpia local de la biblioteca, empaquetada dins del WASM.
 - `site/`: exportació WASM llesta per servir.
 

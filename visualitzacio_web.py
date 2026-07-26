@@ -100,3 +100,67 @@ def crear_figura_resultats(avaluacio: AvaluacioXarxa):
     eix_cabals.set_xticks(range(1, topologia.columnes + 1))
     eix_cabals.set_yticks(range(1, topologia.files + 1))
     return figura
+
+
+def crear_figures_entorn(estudi):
+    """Crea la corba Q(ΔH) i la superfície Q(files, columnes)."""
+    figura_salt, eix_salt = plt.subplots(figsize=(8, 4.8))
+    eix_salt.plot(
+        estudi.salts_m,
+        estudi.cabals_salt_mm3_s,
+        "o-",
+        color="#0057d9",
+        linewidth=2,
+        label=f"Xarxa {estudi.files_centre} × {estudi.columnes_centre}",
+    )
+    eix_salt.scatter(
+        [estudi.salt_centre_m],
+        [estudi.cabal_centre_mm3_s],
+        s=90,
+        color="#e31a1c",
+        zorder=5,
+        label="Punt de funcionament",
+    )
+    eix_salt.set_xlabel("Diferència d'altura piezomètrica ΔH [m]")
+    eix_salt.set_ylabel("Cabal total Q [mm³/s]")
+    eix_salt.set_title("Resposta al voltant del punt de funcionament")
+    eix_salt.grid(alpha=0.25)
+    eix_salt.legend()
+    figura_salt.tight_layout()
+
+    columnes_malla, files_malla = np.meshgrid(estudi.columnes, estudi.files)
+    cabals_malla = np.asarray(estudi.cabals_dimensions_mm3_s)
+    figura_superficie = plt.figure(figsize=(9, 6.5))
+    eix_superficie = figura_superficie.add_subplot(111, projection="3d")
+    superficie = eix_superficie.plot_surface(
+        columnes_malla,
+        files_malla,
+        cabals_malla,
+        cmap="viridis",
+        edgecolor="black",
+        linewidth=0.35,
+        alpha=0.88,
+    )
+    eix_superficie.scatter(
+        [estudi.columnes_centre],
+        [estudi.files_centre],
+        [estudi.cabal_centre_mm3_s],
+        color="#e31a1c",
+        s=80,
+        label="Punt de funcionament",
+    )
+    eix_superficie.set_xlabel("Columnes")
+    eix_superficie.set_ylabel("Files")
+    eix_superficie.set_zlabel("Q total [mm³/s]")
+    eix_superficie.set_title(
+        f"Efecte de les dimensions per ΔH = {estudi.salt_centre_m:g} m"
+    )
+    eix_superficie.legend()
+    figura_superficie.colorbar(
+        superficie,
+        ax=eix_superficie,
+        shrink=0.65,
+        pad=0.12,
+        label="Q total [mm³/s]",
+    )
+    return figura_salt, figura_superficie
