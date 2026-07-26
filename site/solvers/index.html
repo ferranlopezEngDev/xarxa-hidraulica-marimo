@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" href="./assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" href="./assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="./assets/Lora-VariableFont_wght-CZceb_kH.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Regular-Bam3NpBI.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Bold-C_DwAp7Z.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Regular-CEsLFVD9.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Medium-D5MAsWEG.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Bold-C6PDArdf.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        const scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          // Guard against race condition where iframe isn't ready
+          if (!obj.contentWindow?.document?.documentElement) {
+            return;
+          }
+          const element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          const hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          const newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((_entries) => {
+          setHeight();
+        });
+        // Only observe if iframe content is ready
+        if (obj.contentWindow?.document?.body) {
+          resizeObserver.observe(obj.contentWindow.document.body);
+        }
+      }
+    </script>
+    <marimo-filename hidden>notebook.py</marimo-filename>
+    <!-- TODO(Trevor): Legacy, required by VS Code plugin. Remove when plugin is updated (see marimo/server/_templates/template.py) -->
+    <marimo-version data-version="{{ version }}" hidden></marimo-version>
+    <marimo-user-config data-config="{{ user_config }}" hidden></marimo-user-config>
+    <marimo-server-token data-token="{{ server_token }}" hidden></marimo-server-token>
+    <!-- /TODO -->
+    <title>solvers</title>
+    <script type="module" crossorigin src="./assets/index-D73cl2ti.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/preload-helper-TXkS1QI3.js">
+    <link rel="modulepreload" crossorigin href="./assets/objects-BlG0ZrO0.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-LvLJmgfZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-Bj1aDYRI.js">
+    <link rel="modulepreload" crossorigin href="./assets/compiler-runtime-B3qBwwSJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/jsx-runtime-Blw4afVn.js">
+    <link rel="modulepreload" crossorigin href="./assets/useEventListener-B_w3A283.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultLocale-DOVIEEPN.js">
+    <link rel="modulepreload" crossorigin href="./assets/precisionRound-i2ImZxgc.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultLocale-BUCH2FMc.js">
+    <link rel="modulepreload" crossorigin href="./assets/vega-loader.browser-Dun7Qe4B.js">
+    <link rel="modulepreload" crossorigin href="./assets/tooltip-HLb6RxVp.js">
+    <link rel="modulepreload" crossorigin href="./assets/clsx-XrBBnd7s.js">
+    <link rel="modulepreload" crossorigin href="./assets/cn-DYvqRARy.js">
+    <link rel="modulepreload" crossorigin href="./assets/badge-B92a4ePY.js">
+    <link rel="modulepreload" crossorigin href="./assets/button-eIihcbUw.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-dom-CSu739Rf.js">
+    <link rel="modulepreload" crossorigin href="./assets/fullscreen-dUjPYOmm.js">
+    <link rel="modulepreload" crossorigin href="./assets/menu-items-DbSLBfXR.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-ByVeMWkr.js">
+    <link rel="modulepreload" crossorigin href="./assets/createLucideIcon-w-Qo9n0R.js">
+    <link rel="modulepreload" crossorigin href="./assets/check-rzLRd0j9.js">
+    <link rel="modulepreload" crossorigin href="./assets/x-C-Eq0ag8.js">
+    <link rel="modulepreload" crossorigin href="./assets/select-B5TFNjmU.js">
+    <link rel="modulepreload" crossorigin href="./assets/tooltip-CFX4fYHU.js">
+    <link rel="modulepreload" crossorigin href="./assets/use-toast-BwJoaaDM.js">
+    <link rel="modulepreload" crossorigin href="./assets/useEvent-D91BmmQi.js">
+    <link rel="modulepreload" crossorigin href="./assets/invariant-CkiqGLcK.js">
+    <link rel="modulepreload" crossorigin href="./assets/isObject-DvLSfCY5.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseFor-DKD1r8uL.js">
+    <link rel="modulepreload" crossorigin href="./assets/merge-_9WLTEyt.js">
+    <link rel="modulepreload" crossorigin href="./assets/zod-H_cgTO0M.js">
+    <link rel="modulepreload" crossorigin href="./assets/utils-Z80SV4_d.js">
+    <link rel="modulepreload" crossorigin href="./assets/Deferred-D2igisxY.js">
+    <link rel="modulepreload" crossorigin href="./assets/uuid-ImXS-885.js">
+    <link rel="modulepreload" crossorigin href="./assets/DeferredRequestRegistry-C8EV1PoE.js">
+    <link rel="modulepreload" crossorigin href="./assets/constants-CDyU_g2F.js">
+    <link rel="modulepreload" crossorigin href="./assets/session-CEFnN9Cq.js">
+    <link rel="modulepreload" crossorigin href="./assets/config-BbOTTCYY.js">
+    <link rel="modulepreload" crossorigin href="./assets/requests-9-v2bhoi.js">
+    <link rel="modulepreload" crossorigin href="./assets/useLifecycle-lLOBhc-1.js">
+    <link rel="modulepreload" crossorigin href="./assets/useNonce-CbdaHKzX.js">
+    <link rel="modulepreload" crossorigin href="./assets/useTheme-KXqAyDPC.js">
+    <link rel="modulepreload" crossorigin href="./assets/arrays-DbOq36rN.js">
+    <link rel="modulepreload" crossorigin href="./assets/strings-Djnbwmfl.js">
+    <link rel="modulepreload" crossorigin href="./assets/once-CGKw_kwj.js">
+    <link rel="modulepreload" crossorigin href="./assets/capabilities-B09j1Eor.js">
+    <link rel="modulepreload" crossorigin href="./assets/createReducer-C7kZ8zEe.js">
+    <link rel="modulepreload" crossorigin href="./assets/paths-BKO-pHK6.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-12S8I4CH.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DYEuVkEX.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BCMBu0rO.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BJZAIIze.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-aRc_dRed.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DnjsPBRJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DcwTQG1A.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-CPjTeT8p.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DI1-Z60I.js">
+    <link rel="modulepreload" crossorigin href="./assets/stex-FMMSUPAS.js">
+    <link rel="modulepreload" crossorigin href="./assets/toDate-Ct2FT81-.js">
+    <link rel="modulepreload" crossorigin href="./assets/purify.es-CWmnYhGI.js">
+    <link rel="modulepreload" crossorigin href="./assets/cjs-D5tzp-Y6.js">
+    <link rel="modulepreload" crossorigin href="./assets/isSymbol-BT6B8Bon.js">
+    <link rel="modulepreload" crossorigin href="./assets/now-CsYTPAhW.js">
+    <link rel="modulepreload" crossorigin href="./assets/debounce-OiXznToA.js">
+    <link rel="modulepreload" crossorigin href="./assets/database-zap-CKO8g4BU.js">
+    <link rel="modulepreload" crossorigin href="./assets/main-BNL5rxQw.js">
+    <link rel="modulepreload" crossorigin href="./assets/cells-Cf7bHHq3.js">
+    <link rel="modulepreload" crossorigin href="./assets/kbd-C5HnBH5U.js">
+    <link rel="modulepreload" crossorigin href="./assets/useInstallPackage-BRbUAUFn.js">
+    <link rel="modulepreload" crossorigin href="./assets/alert-dialog-BXegNC0I.js">
+    <link rel="modulepreload" crossorigin href="./assets/dialog-D1DEsRZ2.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDebounce-JDKr83KO.js">
+    <link rel="modulepreload" crossorigin href="./assets/numbers-CeeaFKqu.js">
+    <link rel="modulepreload" crossorigin href="./assets/SSRProvider-BUSmWJKC.js">
+    <link rel="modulepreload" crossorigin href="./assets/context-BFPaAUK_.js">
+    <link rel="modulepreload" crossorigin href="./assets/useNumberFormatter-4-Qvf4uR.js">
+    <link rel="modulepreload" crossorigin href="./assets/usePress-5hBv4sjD.js">
+    <link rel="modulepreload" crossorigin href="./assets/input-CqrUjynb.js">
+    <link rel="modulepreload" crossorigin href="./assets/ImperativeModal-BIavOiUv.js">
+    <link rel="modulepreload" crossorigin href="./assets/cell-link-DqBkyAFe.js">
+    <link rel="modulepreload" crossorigin href="./assets/config-COUOIPEq.js">
+    <link rel="modulepreload" crossorigin href="./assets/alert-jlwhGxSb.js">
+    <link rel="modulepreload" crossorigin href="./assets/chevron-right-BS_NcSch.js">
+    <link rel="modulepreload" crossorigin href="./assets/dropdown-menu-BFZLnWeO.js">
+    <link rel="modulepreload" crossorigin href="./assets/links-wcQA1Np1.js">
+    <link rel="modulepreload" crossorigin href="./assets/useRunCells-CSSF_mJ0.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-BtTOqPTS.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-3iHFdt22.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-icon-C2pG0ZNK.js">
+    <link rel="modulepreload" crossorigin href="./assets/RenderHTML-BCvU9dYz.js">
+    <link rel="modulepreload" crossorigin href="./assets/datasource-ySAiC9gr.js">
+    <link rel="modulepreload" crossorigin href="./assets/state-DBzEQtWz.js">
+    <link rel="modulepreload" crossorigin href="./assets/hat-glasses-BttHlyvs.js">
+    <link rel="modulepreload" crossorigin href="./assets/package-Bxz_8e44.js">
+    <link rel="modulepreload" crossorigin href="./assets/sparkles-DUCpRFlS.js">
+    <link rel="modulepreload" crossorigin href="./assets/MarimoErrorOutput-DO2k2fA5.js">
+    <link rel="modulepreload" crossorigin href="./assets/ErrorBoundary-C7_5jjWi.js">
+    <link rel="modulepreload" crossorigin href="./assets/eye-off-BOZA7gbn.js">
+    <link rel="modulepreload" crossorigin href="./assets/refresh-cw-CYq4mK5a.js">
+    <link rel="modulepreload" crossorigin href="./assets/tree-actions-CsC2XmGo.js">
+    <link rel="modulepreload" crossorigin href="./assets/spinner-D-V4psAa.js">
+    <link rel="modulepreload" crossorigin href="./assets/html-to-image-CwmX28T9.js">
+    <link rel="modulepreload" crossorigin href="./assets/focus-DiEyfiAG.js">
+    <link rel="modulepreload" crossorigin href="./assets/useAsyncData-Bg5iAViP.js">
+    <link rel="modulepreload" crossorigin href="./assets/LazyAnyLanguageCodeMirror-sVm_hz8A.js">
+    <link rel="modulepreload" crossorigin href="./assets/micromark-factory-space-Dx_STMJD.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-5FQGJX7Z-Cp0LZT-a.js">
+    <link rel="modulepreload" crossorigin href="./assets/markdown-renderer-QvXG0CRk.js">
+    <link rel="modulepreload" crossorigin href="./assets/command-CAJLPEBq.js">
+    <link rel="modulepreload" crossorigin href="./assets/field-BeZbVzXA.js">
+    <link rel="modulepreload" crossorigin href="./assets/popover-DrHQ3KEt.js">
+    <link rel="modulepreload" crossorigin href="./assets/errors-PgHhDa-M.js">
+    <link rel="modulepreload" crossorigin href="./assets/download-BomYt3nl.js">
+    <link rel="modulepreload" crossorigin href="./assets/table-CH2plyy9.js">
+    <link rel="modulepreload" crossorigin href="./assets/useIframeCapabilities-Ccb4fvKc.js">
+    <link rel="modulepreload" crossorigin href="./assets/error-banner-B6eIlxzg.js">
+    <link rel="modulepreload" crossorigin href="./assets/formats-ClEFGPy-.js">
+    <link rel="modulepreload" crossorigin href="./assets/utils-CCTAhdFi.js">
+    <link rel="modulepreload" crossorigin href="./assets/en-US-CjNeNXDB.js">
+    <link rel="modulepreload" crossorigin href="./assets/isValid-D7naiWNs.js">
+    <link rel="modulepreload" crossorigin href="./assets/dates-D-kIKDYA.js">
+    <link rel="modulepreload" crossorigin href="./assets/extends-B9D0JO9U.js">
+    <link rel="modulepreload" crossorigin href="./assets/emotion-is-prop-valid.esm-lG8j6oqk.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDateFormatter-rtpVEy3J.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-icons.esm-D4GMDkIf.js">
+    <link rel="modulepreload" crossorigin href="./assets/RSPContexts-CgC81f0I.js">
+    <link rel="modulepreload" crossorigin href="./assets/table-D-tcnZC7.js">
+    <link rel="modulepreload" crossorigin href="./assets/ellipsis-C_B8Ux9M.js">
+    <link rel="modulepreload" crossorigin href="./assets/external-link-BOlXZUla.js">
+    <link rel="modulepreload" crossorigin href="./assets/message-circle-dL5J5ZsZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/plus-AgXtozBz.js">
+    <link rel="modulepreload" crossorigin href="./assets/trash-2-72W0TZ3L.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-resizable-panels.browser.esm-Z-MD3n3J.js">
+    <link rel="modulepreload" crossorigin href="./assets/JsonOutput-DnGSkLeP.js">
+    <link rel="modulepreload" crossorigin href="./assets/chart-no-axes-column-iDRxid4h.js">
+    <link rel="modulepreload" crossorigin href="./assets/square-function-DNNRTPQJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/spec-CzqcmYQk.js">
+    <link rel="modulepreload" crossorigin href="./assets/column-preview-BgZLUEOj.js">
+    <link rel="modulepreload" crossorigin href="./assets/icons-CIPE8AIY.js">
+    <link rel="modulepreload" crossorigin href="./assets/radio-group-CLBjGkt5.js">
+    <link rel="modulepreload" crossorigin href="./assets/floating-outline-wz-WSRgP.js">
+    <link rel="modulepreload" crossorigin href="./assets/switch-CvweaCXq.js">
+    <link rel="modulepreload" crossorigin href="./assets/objectWithoutPropertiesLoose-CboCOq4o.js">
+    <link rel="modulepreload" crossorigin href="./assets/esm-BL7jQmzn.js">
+    <link rel="modulepreload" crossorigin href="./assets/readonly-python-code-CW_G5e4E.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-headphone-DAu6VO6j.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-CJH9JNGH.js">
+    <link rel="modulepreload" crossorigin href="./assets/image-5XI2VU-q.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-icons-Cb54mIL8.js">
+    <link rel="modulepreload" crossorigin href="./assets/events-90X9nql5.js">
+    <link rel="modulepreload" crossorigin href="./assets/share-CYpcX4N4.js">
+    <link rel="modulepreload" crossorigin href="./assets/blob-C3EfaMOb.js">
+    <link rel="modulepreload" crossorigin href="./assets/memoize-Tp7rARFe.js">
+    <link rel="modulepreload" crossorigin href="./assets/get-C-qh_et5.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseSet-CsW0tABf.js">
+    <link rel="modulepreload" crossorigin href="./assets/state-BXbiRXZk.js">
+    <link rel="modulepreload" crossorigin href="./assets/label-BElwWzf0.js">
+    <link rel="modulepreload" crossorigin href="./assets/textarea-CpFfEUet.js">
+    <link rel="modulepreload" crossorigin href="./assets/refresh-ccw-sLaKP2vj.js">
+    <link rel="modulepreload" crossorigin href="./assets/form-CgWNb44_.js">
+    <link rel="modulepreload" crossorigin href="./assets/renderShortcut-BZLr8D7H.js">
+    <link rel="modulepreload" crossorigin href="./assets/useBoolean-D89u30n-.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDeepCompareMemoize-CSMoa-ga.js">
+    <link rel="modulepreload" crossorigin href="./assets/types-jdbI9Q8O.js">
+    <link rel="modulepreload" crossorigin href="./assets/semaphore-DtBYRzWS.js">
+    <link rel="modulepreload" crossorigin href="./assets/fileToBase64-C2Yy-YXq.js">
+    <link rel="modulepreload" crossorigin href="./assets/pathUtils-Bfcp5m-a.js">
+    <link rel="modulepreload" crossorigin href="./assets/prop-types-C638SUfx.js">
+    <link rel="modulepreload" crossorigin href="./assets/es-1D83cgiu.js">
+    <link rel="modulepreload" crossorigin href="./assets/_hasPath-hMc_3QZy.js">
+    <link rel="modulepreload" crossorigin href="./assets/hasIn-CSsM95b1.js">
+    <link rel="modulepreload" crossorigin href="./assets/flatten-Bd5tsfm_.js">
+    <link rel="modulepreload" crossorigin href="./assets/pick-D1xb4gl6.js">
+    <link rel="modulepreload" crossorigin href="./assets/code-xml-aSiY8T7C.js">
+    <link rel="modulepreload" crossorigin href="./assets/house-DS0r7dNZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/square-DFICx2Qv.js">
+    <link rel="modulepreload" crossorigin href="./assets/triangle-alert-BL4YVsPy.js">
+    <link rel="modulepreload" crossorigin href="./assets/bundle.esm-D0TWQ6iT.js">
+    <link rel="stylesheet" crossorigin href="./assets/cells-BVzo2MHf.css">
+    <link rel="stylesheet" crossorigin href="./assets/markdown-renderer-DdDKmWlR.css">
+    <link rel="stylesheet" crossorigin href="./assets/JsonOutput-BQtz7-np.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-BjlEpvLC.css">
+  <marimo-wasm hidden=""></marimo-wasm>
+    <script>
+        if (window.location.protocol === 'file:') {
+            alert('Warning: This file must be served by an HTTP server to function correctly.');
+        }
+    </script>
+    
+    <style>
+        #save-button {
+            display: none !important;
+        }
+        #filename-input {
+            display: none !important;
+        }
+    </style>
+    
+<script data-marimo="true">
+    Object.defineProperty(window, "__MARIMO_EXPORT_CONTEXT__", {
+        value: Object.freeze({
+            trusted: true,
+            notebookCode: "# /// script\n# dependencies = [\"channel_connections @ ../public/wheels/channel_connections-0.0.0%2Bmarimo.b039cb9cf71a-py3-none-any.whl\", \"comparacio_solvers @ ../public/wheels/comparacio_solvers-0.0.0%2Bmarimo.86c20a5a86d8-py3-none-any.whl\", \"hn3ttk @ ../public/wheels/hn3ttk-0.0.0%2Bmarimo.b2264ba4a800-py3-none-any.whl\", \"network_image_data @ ../public/wheels/network_image_data-0.0.0%2Bmarimo.7617e5f921cd-py3-none-any.whl\", \"xarxa_microxip @ ../public/wheels/xarxa_microxip-0.0.0%2Bmarimo.9a2b8b41e23e-py3-none-any.whl\"]\n# ///\n\n\"\"\"P\u00e0gina Marimo WASM per comparar els solvers d'HN3Ttk.\"\"\"\n\nimport marimo\n\n__generated_with = \"0.23.15\"\napp = marimo.App(width=\"full\")\n\n\n@app.cell\ndef _():\n    import inspect\n    import marimo as mo\n    import matplotlib.pyplot as plt\n    import numpy as np\n    import scipy as _scipy\n    import hn3ttk as _hn3ttk\n\n    from comparacio_solvers import comparar_solvers\n\n    return comparar_solvers, inspect, mo, np, plt\n\n\n@app.cell\ndef _(mo):\n    mo.md(r\"\"\"\n    # Comparaci\u00f3 dels solvers al punt d'inter\u00e8s\n\n    [\u2190 Torna al simulador de la xarxa](../)\n\n    Aquesta p\u00e0gina resol **exactament la mateixa xarxa** amb quatre\n    algoritmes d'HN3Ttk. La comparaci\u00f3 utilitza la mateixa estimaci\u00f3\n    inicial i exigeix un residu m\u00e0xim de \\(10^{-12}\\ \\mathrm{m^3/s}\\).\n\n    Es comparen:\n\n    1. Newton-Raphson;\n    2. Newton-Raphson amortit;\n    3. `SciPy root`, m\u00e8tode `hybr`;\n    4. `SciPy least_squares`, m\u00e8tode `trf`.\n\n    \u003E El temps dep\u00e8n de l'ordinador i del navegador. Converg\u00e8ncia, cabal\n    \u003E i residu s\u00f3n els criteris t\u00e8cnics principals.\n\n    \u003E El codi de la funci\u00f3 de comparaci\u00f3 es pot consultar al final.\n    \"\"\")\n    return\n\n\n@app.cell\ndef _(mo):\n    controls = mo.ui.dictionary(\n        {\n            \"files\": mo.ui.number(start=1, stop=15, step=1, value=10, label=\"Files\"),\n            \"columnes\": mo.ui.number(\n                start=1, stop=20, step=1, value=14, label=\"Columnes\"\n            ),\n            \"salt\": mo.ui.number(\n                start=0.0,\n                stop=1.0,\n                step=0.000001,\n                value=1.0,\n                label=\"Difer\u00e8ncia piezom\u00e8trica \u0394H [m]\",\n            ),\n            \"altura\": mo.ui.number(\n                start=0.1, stop=2.0, step=0.01, value=0.5, label=\"Altura [mm]\"\n            ),\n            \"k\": mo.ui.number(\n                start=0.1, stop=10.0, step=0.001, value=2.483, label=\"K\"\n            ),\n            \"n\": mo.ui.number(\n                start=1.0, stop=3.0, step=0.01, value=1.8, label=\"n\"\n            ),\n        }\n    )\n    formulari = controls.form(\n        submit_button_label=\"Compara els solvers\",\n        bordered=True,\n    )\n    formulari\n    return (formulari,)\n\n\n@app.cell\ndef _(comparar_solvers, formulari, mo):\n    valors = formulari.value or {\n        \"files\": 10,\n        \"columnes\": 14,\n        \"salt\": 1.0,\n        \"altura\": 0.5,\n        \"k\": 2.483,\n        \"n\": 1.8,\n    }\n    mo.output.replace(\n        mo.callout(\"Executant els quatre solvers al navegador\u2026\", kind=\"info\")\n    )\n    resultats = comparar_solvers(\n        files=int(valors[\"files\"]),\n        columnes=int(valors[\"columnes\"]),\n        salt_m=float(valors[\"salt\"]),\n        altura_canal_mm=float(valors[\"altura\"]),\n        coeficient_cel_lular_k=float(valors[\"k\"]),\n        exponent_cel_lular_n=float(valors[\"n\"]),\n    )\n    return resultats, valors\n\n\n@app.cell\ndef _(mo, resultats, valors):\n    files_taula = \"\\n\".join(\n        \"| {nom} | {ok} | {q} | {residu:.3e} | {it} | {temps:.4f} |\".format(\n            nom=r.nom,\n            ok=\"S\u00ed\" if r.convergencia else \"No\",\n            q=\"\u2014\" if r.cabal_mm3_s is None else f\"{r.cabal_mm3_s:.6f}\",\n            residu=r.residu_maxim_m3_s,\n            it=r.iteracions,\n            temps=r.temps_s,\n        )\n        for r in resultats\n    )\n    mo.md(\n        fr\"\"\"\n        ## Resultats\n\n        Punt comparat: **{int(valors[\"files\"])} \u00d7 {int(valors[\"columnes\"])}**,\n        \\(\\Delta H={float(valors[\"salt\"]):.6f}\\ \\mathrm{{m}}\\).\n\n        | Solver | Convergeix | Q [mm\u00b3/s] | Residu m\u00e0xim [m\u00b3/s] | Iteracions | Temps [s] |\n        |---|:---:|---:|---:|---:|---:|\n        {files_taula}\n        \"\"\"\n    )\n    return\n\n\n@app.cell\ndef _(mo, np, plt, resultats):\n    noms = [r.nom for r in resultats]\n    temps = [r.temps_s for r in resultats]\n    residus = [\n        max(r.residu_maxim_m3_s, np.finfo(float).tiny)\n        for r in resultats\n    ]\n    colors = [\"#18864b\" if r.convergencia else \"#d62728\" for r in resultats]\n\n    figura, (eix_temps, eix_residu) = plt.subplots(\n        1, 2, figsize=(14, 5.5), constrained_layout=True\n    )\n    eix_temps.barh(noms, temps, color=colors)\n    eix_temps.set_xlabel(\"Temps [s]\")\n    eix_temps.set_title(\"Temps d'execuci\u00f3\")\n    eix_temps.grid(axis=\"x\", alpha=0.25)\n\n    eix_residu.barh(noms, residus, color=colors)\n    eix_residu.axvline(1.0e-12, color=\"black\", linestyle=\"--\", label=\"Toler\u00e0ncia\")\n    eix_residu.set_xscale(\"log\")\n    eix_residu.set_xlabel(\"Residu m\u00e0xim [m\u00b3/s]\")\n    eix_residu.set_title(\"Qualitat del balan\u00e7 nodal\")\n    eix_residu.grid(axis=\"x\", alpha=0.25)\n    eix_residu.legend()\n\n    mo.vstack(\n        [\n            figura,\n            mo.md(\n                \"\"\"\n                Verd indica que el solver declara converg\u00e8ncia i compleix\n                simult\u00e0niament la toler\u00e0ncia de residu. Vermell indica que\n                almenys una de les dues condicions no es compleix.\n                \"\"\"\n            ),\n        ]\n    )\n    return\n\n\n@app.cell\ndef _(comparar_solvers, inspect, mo):\n    mo.md(\n        \"# Codi de la comparaci\u00f3\\n\\n\"\n        \"```python\\n\"\n        + inspect.getsource(comparar_solvers)\n        + \"\\n```\"\n    )\n    return\n\n\nif __name__ == \"__main__\":\n    app.run()\n",
+        }),
+        writable: false,
+        configurable: false,
+    });
+</script>
+<marimo-code hidden="">%23%20%2F%2F%2F%20script%0A%23%20dependencies%20%3D%20%5B%22channel_connections%20%40%20..%2Fpublic%2Fwheels%2Fchannel_connections-0.0.0%252Bmarimo.b039cb9cf71a-py3-none-any.whl%22%2C%20%22comparacio_solvers%20%40%20..%2Fpublic%2Fwheels%2Fcomparacio_solvers-0.0.0%252Bmarimo.86c20a5a86d8-py3-none-any.whl%22%2C%20%22hn3ttk%20%40%20..%2Fpublic%2Fwheels%2Fhn3ttk-0.0.0%252Bmarimo.b2264ba4a800-py3-none-any.whl%22%2C%20%22network_image_data%20%40%20..%2Fpublic%2Fwheels%2Fnetwork_image_data-0.0.0%252Bmarimo.7617e5f921cd-py3-none-any.whl%22%2C%20%22xarxa_microxip%20%40%20..%2Fpublic%2Fwheels%2Fxarxa_microxip-0.0.0%252Bmarimo.9a2b8b41e23e-py3-none-any.whl%22%5D%0A%23%20%2F%2F%2F%0A%0A%22%22%22P%C3%A0gina%20Marimo%20WASM%20per%20comparar%20els%20solvers%20d'HN3Ttk.%22%22%22%0A%0Aimport%20marimo%0A%0A__generated_with%20%3D%20%220.23.15%22%0Aapp%20%3D%20marimo.App(width%3D%22full%22)%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20inspect%0A%20%20%20%20import%20marimo%20as%20mo%0A%20%20%20%20import%20matplotlib.pyplot%20as%20plt%0A%20%20%20%20import%20numpy%20as%20np%0A%20%20%20%20import%20scipy%20as%20_scipy%0A%20%20%20%20import%20hn3ttk%20as%20_hn3ttk%0A%0A%20%20%20%20from%20comparacio_solvers%20import%20comparar_solvers%0A%0A%20%20%20%20return%20comparar_solvers%2C%20inspect%2C%20mo%2C%20np%2C%20plt%0A%0A%0A%40app.cell%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20%23%20Comparaci%C3%B3%20dels%20solvers%20al%20punt%20d'inter%C3%A8s%0A%0A%20%20%20%20%5B%E2%86%90%20Torna%20al%20simulador%20de%20la%20xarxa%5D(..%2F)%0A%0A%20%20%20%20Aquesta%20p%C3%A0gina%20resol%20**exactament%20la%20mateixa%20xarxa**%20amb%20quatre%0A%20%20%20%20algoritmes%20d'HN3Ttk.%20La%20comparaci%C3%B3%20utilitza%20la%20mateixa%20estimaci%C3%B3%0A%20%20%20%20inicial%20i%20exigeix%20un%20residu%20m%C3%A0xim%20de%20%5C(10%5E%7B-12%7D%5C%20%5Cmathrm%7Bm%5E3%2Fs%7D%5C).%0A%0A%20%20%20%20Es%20comparen%3A%0A%0A%20%20%20%201.%20Newton-Raphson%3B%0A%20%20%20%202.%20Newton-Raphson%20amortit%3B%0A%20%20%20%203.%20%60SciPy%20root%60%2C%20m%C3%A8tode%20%60hybr%60%3B%0A%20%20%20%204.%20%60SciPy%20least_squares%60%2C%20m%C3%A8tode%20%60trf%60.%0A%0A%20%20%20%20%3E%20El%20temps%20dep%C3%A8n%20de%20l'ordinador%20i%20del%20navegador.%20Converg%C3%A8ncia%2C%20cabal%0A%20%20%20%20%3E%20i%20residu%20s%C3%B3n%20els%20criteris%20t%C3%A8cnics%20principals.%0A%0A%20%20%20%20%3E%20El%20codi%20de%20la%20funci%C3%B3%20de%20comparaci%C3%B3%20es%20pot%20consultar%20al%20final.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(mo)%3A%0A%20%20%20%20controls%20%3D%20mo.ui.dictionary(%0A%20%20%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%22files%22%3A%20mo.ui.number(start%3D1%2C%20stop%3D15%2C%20step%3D1%2C%20value%3D10%2C%20label%3D%22Files%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22columnes%22%3A%20mo.ui.number(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20start%3D1%2C%20stop%3D20%2C%20step%3D1%2C%20value%3D14%2C%20label%3D%22Columnes%22%0A%20%20%20%20%20%20%20%20%20%20%20%20)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22salt%22%3A%20mo.ui.number(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20start%3D0.0%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20stop%3D1.0%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20step%3D0.000001%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20value%3D1.0%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20label%3D%22Difer%C3%A8ncia%20piezom%C3%A8trica%20%CE%94H%20%5Bm%5D%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22altura%22%3A%20mo.ui.number(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20start%3D0.1%2C%20stop%3D2.0%2C%20step%3D0.01%2C%20value%3D0.5%2C%20label%3D%22Altura%20%5Bmm%5D%22%0A%20%20%20%20%20%20%20%20%20%20%20%20)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22k%22%3A%20mo.ui.number(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20start%3D0.1%2C%20stop%3D10.0%2C%20step%3D0.001%2C%20value%3D2.483%2C%20label%3D%22K%22%0A%20%20%20%20%20%20%20%20%20%20%20%20)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22n%22%3A%20mo.ui.number(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20start%3D1.0%2C%20stop%3D3.0%2C%20step%3D0.01%2C%20value%3D1.8%2C%20label%3D%22n%22%0A%20%20%20%20%20%20%20%20%20%20%20%20)%2C%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20)%0A%20%20%20%20formulari%20%3D%20controls.form(%0A%20%20%20%20%20%20%20%20submit_button_label%3D%22Compara%20els%20solvers%22%2C%0A%20%20%20%20%20%20%20%20bordered%3DTrue%2C%0A%20%20%20%20)%0A%20%20%20%20formulari%0A%20%20%20%20return%20(formulari%2C)%0A%0A%0A%40app.cell%0Adef%20_(comparar_solvers%2C%20formulari%2C%20mo)%3A%0A%20%20%20%20valors%20%3D%20formulari.value%20or%20%7B%0A%20%20%20%20%20%20%20%20%22files%22%3A%2010%2C%0A%20%20%20%20%20%20%20%20%22columnes%22%3A%2014%2C%0A%20%20%20%20%20%20%20%20%22salt%22%3A%201.0%2C%0A%20%20%20%20%20%20%20%20%22altura%22%3A%200.5%2C%0A%20%20%20%20%20%20%20%20%22k%22%3A%202.483%2C%0A%20%20%20%20%20%20%20%20%22n%22%3A%201.8%2C%0A%20%20%20%20%7D%0A%20%20%20%20mo.output.replace(%0A%20%20%20%20%20%20%20%20mo.callout(%22Executant%20els%20quatre%20solvers%20al%20navegador%E2%80%A6%22%2C%20kind%3D%22info%22)%0A%20%20%20%20)%0A%20%20%20%20resultats%20%3D%20comparar_solvers(%0A%20%20%20%20%20%20%20%20files%3Dint(valors%5B%22files%22%5D)%2C%0A%20%20%20%20%20%20%20%20columnes%3Dint(valors%5B%22columnes%22%5D)%2C%0A%20%20%20%20%20%20%20%20salt_m%3Dfloat(valors%5B%22salt%22%5D)%2C%0A%20%20%20%20%20%20%20%20altura_canal_mm%3Dfloat(valors%5B%22altura%22%5D)%2C%0A%20%20%20%20%20%20%20%20coeficient_cel_lular_k%3Dfloat(valors%5B%22k%22%5D)%2C%0A%20%20%20%20%20%20%20%20exponent_cel_lular_n%3Dfloat(valors%5B%22n%22%5D)%2C%0A%20%20%20%20)%0A%20%20%20%20return%20resultats%2C%20valors%0A%0A%0A%40app.cell%0Adef%20_(mo%2C%20resultats%2C%20valors)%3A%0A%20%20%20%20files_taula%20%3D%20%22%5Cn%22.join(%0A%20%20%20%20%20%20%20%20%22%7C%20%7Bnom%7D%20%7C%20%7Bok%7D%20%7C%20%7Bq%7D%20%7C%20%7Bresidu%3A.3e%7D%20%7C%20%7Bit%7D%20%7C%20%7Btemps%3A.4f%7D%20%7C%22.format(%0A%20%20%20%20%20%20%20%20%20%20%20%20nom%3Dr.nom%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20ok%3D%22S%C3%AD%22%20if%20r.convergencia%20else%20%22No%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20q%3D%22%E2%80%94%22%20if%20r.cabal_mm3_s%20is%20None%20else%20f%22%7Br.cabal_mm3_s%3A.6f%7D%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20residu%3Dr.residu_maxim_m3_s%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20it%3Dr.iteracions%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20temps%3Dr.temps_s%2C%0A%20%20%20%20%20%20%20%20)%0A%20%20%20%20%20%20%20%20for%20r%20in%20resultats%0A%20%20%20%20)%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20fr%22%22%22%0A%20%20%20%20%20%20%20%20%23%23%20Resultats%0A%0A%20%20%20%20%20%20%20%20Punt%20comparat%3A%20**%7Bint(valors%5B%22files%22%5D)%7D%20%C3%97%20%7Bint(valors%5B%22columnes%22%5D)%7D**%2C%0A%20%20%20%20%20%20%20%20%5C(%5CDelta%20H%3D%7Bfloat(valors%5B%22salt%22%5D)%3A.6f%7D%5C%20%5Cmathrm%7B%7Bm%7D%7D%5C).%0A%0A%20%20%20%20%20%20%20%20%7C%20Solver%20%7C%20Convergeix%20%7C%20Q%20%5Bmm%C2%B3%2Fs%5D%20%7C%20Residu%20m%C3%A0xim%20%5Bm%C2%B3%2Fs%5D%20%7C%20Iteracions%20%7C%20Temps%20%5Bs%5D%20%7C%0A%20%20%20%20%20%20%20%20%7C---%7C%3A---%3A%7C---%3A%7C---%3A%7C---%3A%7C---%3A%7C%0A%20%20%20%20%20%20%20%20%7Bfiles_taula%7D%0A%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(mo%2C%20np%2C%20plt%2C%20resultats)%3A%0A%20%20%20%20noms%20%3D%20%5Br.nom%20for%20r%20in%20resultats%5D%0A%20%20%20%20temps%20%3D%20%5Br.temps_s%20for%20r%20in%20resultats%5D%0A%20%20%20%20residus%20%3D%20%5B%0A%20%20%20%20%20%20%20%20max(r.residu_maxim_m3_s%2C%20np.finfo(float).tiny)%0A%20%20%20%20%20%20%20%20for%20r%20in%20resultats%0A%20%20%20%20%5D%0A%20%20%20%20colors%20%3D%20%5B%22%2318864b%22%20if%20r.convergencia%20else%20%22%23d62728%22%20for%20r%20in%20resultats%5D%0A%0A%20%20%20%20figura%2C%20(eix_temps%2C%20eix_residu)%20%3D%20plt.subplots(%0A%20%20%20%20%20%20%20%201%2C%202%2C%20figsize%3D(14%2C%205.5)%2C%20constrained_layout%3DTrue%0A%20%20%20%20)%0A%20%20%20%20eix_temps.barh(noms%2C%20temps%2C%20color%3Dcolors)%0A%20%20%20%20eix_temps.set_xlabel(%22Temps%20%5Bs%5D%22)%0A%20%20%20%20eix_temps.set_title(%22Temps%20d'execuci%C3%B3%22)%0A%20%20%20%20eix_temps.grid(axis%3D%22x%22%2C%20alpha%3D0.25)%0A%0A%20%20%20%20eix_residu.barh(noms%2C%20residus%2C%20color%3Dcolors)%0A%20%20%20%20eix_residu.axvline(1.0e-12%2C%20color%3D%22black%22%2C%20linestyle%3D%22--%22%2C%20label%3D%22Toler%C3%A0ncia%22)%0A%20%20%20%20eix_residu.set_xscale(%22log%22)%0A%20%20%20%20eix_residu.set_xlabel(%22Residu%20m%C3%A0xim%20%5Bm%C2%B3%2Fs%5D%22)%0A%20%20%20%20eix_residu.set_title(%22Qualitat%20del%20balan%C3%A7%20nodal%22)%0A%20%20%20%20eix_residu.grid(axis%3D%22x%22%2C%20alpha%3D0.25)%0A%20%20%20%20eix_residu.legend()%0A%0A%20%20%20%20mo.vstack(%0A%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20figura%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Verd%20indica%20que%20el%20solver%20declara%20converg%C3%A8ncia%20i%20compleix%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20simult%C3%A0niament%20la%20toler%C3%A0ncia%20de%20residu.%20Vermell%20indica%20que%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20almenys%20una%20de%20les%20dues%20condicions%20no%20es%20compleix.%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22%22%22%0A%20%20%20%20%20%20%20%20%20%20%20%20)%2C%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(comparar_solvers%2C%20inspect%2C%20mo)%3A%0A%20%20%20%20mo.md(%0A%20%20%20%20%20%20%20%20%22%23%20Codi%20de%20la%20comparaci%C3%B3%5Cn%5Cn%22%0A%20%20%20%20%20%20%20%20%22%60%60%60python%5Cn%22%0A%20%20%20%20%20%20%20%20%2B%20inspect.getsource(comparar_solvers)%0A%20%20%20%20%20%20%20%20%2B%20%22%5Cn%60%60%60%22%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A</marimo-code></head>
+  <body>
+    <div id="root"></div>
+    <script data-marimo="true">
+      Object.defineProperty(window, "__MARIMO_MOUNT_CONFIG__", {
+        value: Object.freeze({
+            "filename": "notebook.py",
+            "cwd": "",
+            "lspWorkspace": null,
+            "mode": "read",
+            "version": "0.23.15",
+            "serverToken": "unused",
+            "config": {"ai": {"custom_providers": {}, "enabled": true, "models": {"custom_models": [], "displayed_models": []}}, "completion": {"activate_on_typing": true, "auto_close_pairs": true, "copilot": false, "signature_hint_on_typing": false}, "diagnostics": {"sql_linter": true}, "display": {"cell_output": "below", "code_editor_font_size": 14, "dataframes": "rich", "default_table_max_columns": 50, "default_table_page_size": 10, "default_width": "medium", "reference_highlighting": true, "theme": "light"}, "formatting": {"line_length": 79}, "keymap": {"overrides": {}, "preset": "default"}, "language_servers": {"pylsp": {"enable_flake8": false, "enable_mypy": true, "enable_pydocstyle": false, "enable_pyflakes": false, "enable_pylint": false, "enable_ruff": true, "enabled": false}}, "mcp": {"mcpServers": {}, "presets": []}, "package_management": {"manager": "pip"}, "runtime": {"auto_instantiate": false, "auto_reload": "off", "default_csv_encoding": "utf-8", "default_sql_output": "auto", "on_cell_change": "autorun", "output_max_bytes": 8000000, "reactive_tests": true, "show_tracebacks": false, "std_stream_max_bytes": 1000000, "watcher_on_save": "lazy"}, "save": {"autosave": "off", "autosave_delay": 1000, "format_on_save": false}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}},
+            "configOverrides": {},
+            "appConfig": {"sql_output": "auto", "width": "full"},
+            "view": {"showAppCode": true},
+            "notebook": null,
+            "session": null,
+            "runtimeConfig": null,
+        }),
+        writable: false,
+        configurable: false,
+      });
+    </script>
+  </body>
+</html>

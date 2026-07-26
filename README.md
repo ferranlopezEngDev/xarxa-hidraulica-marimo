@@ -71,6 +71,8 @@ automàticament.
 - `network_image_data.py`: dades transcrites del cas original.
 - `visualitzacio_web.py`: gràfics, separats de l'exemple d'ús.
 - `estudis_web.py`: estudi paramètric al voltant del punt seleccionat.
+- `solvers.py`: pàgina WASM de comparació dels solvers.
+- `comparacio_solvers.py`: execució homogènia i mesura dels solvers.
 - `hn3ttk/`: còpia local de la biblioteca, empaquetada dins del WASM.
 - `site/`: exportació WASM llesta per servir.
 

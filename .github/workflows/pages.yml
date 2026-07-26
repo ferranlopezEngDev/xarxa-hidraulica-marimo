@@ -33,6 +33,9 @@ jobs:
       - name: Construeix l'aplicació Marimo WASM
         run: marimo export html-wasm app.py -o site --mode run --show-code -f
 
+      - name: Construeix la comparació de solvers
+        run: marimo export html-wasm solvers.py -o site/solvers --mode run --show-code -f
+
       - name: Configura GitHub Pages
         uses: actions/configure-pages@v5
 

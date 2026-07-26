@@ -69,6 +69,8 @@ def _(mo):
         > preparar i documentar aquesta llibreta. L'objectiu és mostrar un
         > exemple complet, clar i interactiu de com es pot utilitzar el
         > repositori **HN3Ttk** en un cas d'estudi real.
+
+        **[Obre la pàgina de comparació dels solvers →](./solvers/)**
         """
     )
     return
