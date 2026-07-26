@@ -152,6 +152,8 @@ def crear_figures_entorn(estudi):
     eix_superficie.set_xlabel("Columnes")
     eix_superficie.set_ylabel("Files")
     eix_superficie.set_zlabel("Q total [mm³/s]")
+    eix_superficie.invert_xaxis()
+    eix_superficie.view_init(elev=28, azim=-135)
     eix_superficie.set_title(
         f"Efecte de les dimensions per ΔH = {estudi.salt_centre_m:g} m"
     )
