@@ -131,7 +131,11 @@ def crear_figures_entorn(estudi):
     columnes_malla, files_malla = np.meshgrid(estudi.columnes, estudi.files)
     cabals_malla = np.asarray(estudi.cabals_dimensions_mm3_s)
     figura_superficie = plt.figure(figsize=(9, 6.5))
-    eix_superficie = figura_superficie.add_subplot(111, projection="3d")
+    eix_superficie = figura_superficie.add_subplot(
+        111,
+        projection="3d",
+        computed_zorder=False,
+    )
     superficie = eix_superficie.plot_surface(
         columnes_malla,
         files_malla,
@@ -139,21 +143,39 @@ def crear_figures_entorn(estudi):
         cmap="viridis",
         edgecolor="black",
         linewidth=0.35,
-        alpha=0.88,
+        alpha=0.82,
+        zorder=1,
+    )
+    marge_marcador = max(
+        10.0,
+        0.04 * (float(cabals_malla.max()) - float(cabals_malla.min())),
+    )
+    z_marcador = estudi.cabal_centre_mm3_s + marge_marcador
+    eix_superficie.plot(
+        [estudi.columnes_centre, estudi.columnes_centre],
+        [estudi.files_centre, estudi.files_centre],
+        [estudi.cabal_centre_mm3_s, z_marcador],
+        color="#e31a1c",
+        linewidth=1.5,
+        zorder=10,
     )
     eix_superficie.scatter(
         [estudi.columnes_centre],
         [estudi.files_centre],
-        [estudi.cabal_centre_mm3_s],
+        [z_marcador],
         color="#e31a1c",
-        s=80,
+        edgecolor="white",
+        linewidth=0.8,
+        depthshade=False,
+        s=90,
+        zorder=11,
         label="Punt de funcionament",
     )
     eix_superficie.set_xlabel("Columnes")
     eix_superficie.set_ylabel("Files")
     eix_superficie.set_zlabel("Q total [mm³/s]")
     eix_superficie.invert_xaxis()
-    eix_superficie.view_init(elev=28, azim=-135)
+    eix_superficie.view_init(elev=48, azim=45)
     eix_superficie.set_title(
         f"Efecte de les dimensions per ΔH = {estudi.salt_centre_m:g} m"
     )
