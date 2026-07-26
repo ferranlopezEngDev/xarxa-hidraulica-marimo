@@ -1,0 +1,410 @@
+"""Aplicació Marimo WASM interactiva per publicar amb GitHub Pages."""
+
+import marimo
+
+__generated_with = "0.23.15"
+app = marimo.App(width="full")
+
+
+@app.cell
+def _():
+    import inspect
+    import marimo as mo
+    import matplotlib as _matplotlib
+    import numpy as _numpy
+    import scipy as _scipy
+    import hn3ttk as _hn3ttk
+
+    from channel_connections import (
+        power_law_channel_from_pa_mm3s,
+        rectangular_channel_from_mm,
+    )
+    from xarxa_microxip import (
+        avaluar_xarxa,
+        construir_sistema,
+        generar_topologia,
+    )
+    from visualitzacio_web import crear_figura_resultats
+
+    return (
+        avaluar_xarxa,
+        construir_sistema,
+        crear_figura_resultats,
+        generar_topologia,
+        inspect,
+        mo,
+        power_law_channel_from_pa_mm3s,
+        rectangular_channel_from_mm,
+    )
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+        # Simulador hidràulic de la xarxa de refrigeració
+
+        Aquesta aplicació executa **HN3Ttk directament al navegador** mitjançant
+        WebAssembly. No envia dades a cap servidor.
+
+        El cas inicial és exactament la xarxa proporcionada: 10 files,
+        14 columnes, altura de canal de 0,5 mm, \(K=2{,}483\) i \(n=1{,}8\).
+        Modifiqueu els paràmetres i premeu **Calcula la xarxa**.
+
+        > **Codi font:** primer s'explica tot el procediment de manera
+        > conceptual. El codi complet de les funcions utilitzades es presenta
+        > a l'apèndix final d'aquesta mateixa llibreta.
+        """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+        ## 1. Dades extretes de la figura
+
+        La xarxa de referència té 10 files i 14 columnes de cel·les. Això dona:
+
+        \[
+        N_\mathrm{nodes}=2+2m(n+1)=302,
+        \qquad
+        N_\mathrm{canals}=m(3n+2)=440.
+        \]
+
+        El peu de figura estableix que els tubs blaus i vermells tenen secció
+        rectangular d'altura \(h=0{,}5\ \mathrm{mm}\). Aquesta \(h\) és una
+        **dimensió geomètrica**, no una pèrdua de càrrega.
+
+        Les dades restants són:
+
+        - col·lectors verticals: amplada 1,4 mm;
+        - laterals: longitud 1,2 mm i amplada variable;
+        - canals verds: \(K=2{,}483\), \(n=1{,}8\);
+        - llei experimental verda:
+          \(\Delta P[\mathrm{Pa}]=KQ[\mathrm{mm^3/s}]^n\).
+        """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+        ## 2. Construcció paramètrica de la topologia
+
+        Les files es numeren de baix a dalt i les columnes de dreta a
+        esquerra, seguint el recorregut del fluid pel lateral blau.
+
+        Per a cada fila es generen automàticament:
+
+        1. un node del col·lector blau;
+        2. \(n\) nodes del lateral blau;
+        3. \(n\) nodes del lateral vermell;
+        4. un node del col·lector vermell;
+        5. \(n\) canals verds que uneixen cada parella de nodes.
+
+        Finalment s'afegeixen el node d'entrada i el de sortida. El constructor
+        verifica identificadors consecutius, connexions vàlides i absència de
+        nodes aïllats abans de crear el sistema hidràulic.
+        """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+        ## 3. Model hidràulic de cada canal
+
+        HN3Ttk treballa amb cabals en \(\mathrm{m^3/s}\) i altures en metres.
+        Totes les connexions segueixen el conveni:
+
+        \[
+        \Delta H=-K\,\operatorname{sign}(Q)|Q|^n.
+        \]
+
+        ### Tubs rectangulars blaus i vermells
+
+        Es calcula l'àrea \(A=wh\), el perímetre mullat \(P=2(w+h)\) i el
+        diàmetre hidràulic:
+
+        \[
+        D_h=\frac{4A}{P}=\frac{2wh}{w+h}.
+        \]
+
+        El wrapper conserva la velocitat real de la secció rectangular i usa
+        `PipeLocalPowerLaw` per actualitzar \(K(Q)\) i \(n(Q)\) segons Reynolds.
+
+        ### Canals verds
+
+        La llei de la figura es converteix a les unitats d'HN3Ttk:
+
+        \[
+        K_\mathrm{SI}
+        =\frac{K}{\rho g\,(10^{-9})^n}.
+        \]
+        """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+        ## 4. Condicions de contorn i equacions
+
+        Es pren la sortida com a referència:
+
+        \[
+        H_\mathrm{sortida}=0,
+        \qquad
+        H_\mathrm{entrada}=\Delta H.
+        \]
+
+        Els altres nodes tenen altura desconeguda. HN3Ttk imposa a cadascun
+        el balanç de continuïtat:
+
+        \[
+        R_i=\sum Q_\mathrm{entra}-\sum Q_\mathrm{surt}=0.
+        \]
+
+        El sistema no prescriu el cabal total: aquest és el resultat de
+        resoldre simultàniament les pèrdues de càrrega i tots els balanços.
+        """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    controls_xarxa = mo.ui.dictionary(
+        {
+            "files": mo.ui.number(
+                start=1,
+                stop=15,
+                step=1,
+                value=10,
+                label="Nombre de files",
+            ),
+            "columnes": mo.ui.number(
+                start=1,
+                stop=20,
+                step=1,
+                value=14,
+                label="Nombre de columnes",
+            ),
+            "salt_h": mo.ui.number(
+                start=0.01,
+                stop=3.0,
+                step=0.05,
+                value=1.0,
+                label="Diferència piezomètrica ΔH [m]",
+            ),
+            "altura": mo.ui.number(
+                start=0.1,
+                stop=2.0,
+                step=0.01,
+                value=0.5,
+                label="Altura del canal [mm]",
+            ),
+            "k": mo.ui.number(
+                start=0.1,
+                stop=10.0,
+                step=0.05,
+                value=2.483,
+                label="Coeficient K dels canals verds",
+            ),
+            "n": mo.ui.number(
+                start=1.0,
+                stop=3.0,
+                step=0.05,
+                value=1.8,
+                label="Exponent n dels canals verds",
+            ),
+        },
+        label="Paràmetres de la xarxa",
+    )
+    formulari_xarxa = controls_xarxa.form(
+        submit_button_label="Calcula la xarxa",
+        bordered=True,
+    )
+    formulari_xarxa
+    return (formulari_xarxa,)
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+        ## 5. Resolució amb HN3Ttk
+
+        En prémer el botó es crea una instància de `HydraulicSystem`, s'hi
+        afegeixen els nodes, les connexions i els links, i es resol el vector
+        d'altures desconegudes amb `solve_scipy_root`.
+
+        La cel·la de codi següent és l'exemple mínim d'ús del repositori:
+        rep els paràmetres del formulari i efectua una sola crida a
+        `avaluar_xarxa`.
+        """
+    )
+    return
+
+
+@app.cell
+def _(formulari_xarxa):
+    parametres_web = formulari_xarxa.value or {
+        "files": 10,
+        "columnes": 14,
+        "salt_h": 1.0,
+        "altura": 0.5,
+        "k": 2.483,
+        "n": 1.8,
+    }
+    return (parametres_web,)
+
+
+@app.cell
+def _(avaluar_xarxa, mo, parametres_web):
+    mo.output.replace(
+        mo.callout(
+            "Calculant la xarxa al navegador…",
+            kind="info",
+        )
+    )
+    avaluacio_web = avaluar_xarxa(
+        int(parametres_web["files"]),
+        int(parametres_web["columnes"]),
+        float(parametres_web["salt_h"]),
+        altura_canal_mm=float(parametres_web["altura"]),
+        coeficient_cel_lular_k=float(parametres_web["k"]),
+        exponent_cel_lular_n=float(parametres_web["n"]),
+        imprimir_resum=False,
+    )
+    return (avaluacio_web,)
+
+
+@app.cell
+def _(avaluacio_web, mo):
+    resultat_web = avaluacio_web.resultat
+    estat_convergencia = "Sí" if resultat_web.success else "No"
+    avisos_web = "<br>".join(avaluacio_web.avisos)
+    mo.md(
+        f"""
+        ## Resultat calculat
+
+        | Magnitud | Valor |
+        |---|---:|
+        | Dimensions | {avaluacio_web.topologia.files} × {avaluacio_web.topologia.columnes} |
+        | Nodes | {avaluacio_web.topologia.nombre_nodes} |
+        | Canals | {avaluacio_web.topologia.nombre_canals} |
+        | ΔH | {avaluacio_web.salt_piezometric_m:.3f} m |
+        | Altura del canal | {avaluacio_web.altura_canal_mm:.3f} mm |
+        | K cel·lular | {avaluacio_web.coeficient_cel_lular_k:.4g} |
+        | n cel·lular | {avaluacio_web.exponent_cel_lular_n:.4g} |
+        | **Cabal total** | **{avaluacio_web.cabal_entrada_mm3_s:.3f} mm³/s** |
+        | Convergència | {estat_convergencia} |
+        | Residu màxim | {resultat_web.max_abs_residual:.3e} m³/s |
+
+        {avisos_web}
+        """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+        ## 6. Comprovacions de la solució
+
+        Una solució s'accepta quan el solver convergeix i el residu màxim de
+        continuïtat és inferior a la tolerància. També es calcula el nombre de
+        Reynolds de tots els tubs rectangulars per informar dels règims
+        laminar, de transició o turbulent.
+
+        El cabal total que es mostra és el cabal del primer tub, connectat al
+        node d'entrada. Per continuïtat coincideix amb el cabal de sortida.
+        """
+    )
+    return
+
+
+@app.cell
+def _(avaluacio_web, crear_figura_resultats, mo):
+    figura_web = crear_figura_resultats(avaluacio_web)
+    mo.vstack(
+        [
+            mo.md("## Distribució interna de la solució"),
+            figura_web,
+        ]
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+        ### Interpretació
+
+        - Els colors dels nodes mostren l'altura piezomètrica.
+        - El mapa de calor mostra el cabal de cadascun dels canals verds.
+        - El cabal total correspon al tub d'entrada.
+        - Un residu proper a zero confirma el balanç de continuïtat.
+
+        En xarxes grans el càlcul pot tardar uns segons perquè totes les
+        equacions es resolen localment al navegador.
+        """
+    )
+    return
+
+
+@app.cell
+def _(
+    avaluar_xarxa,
+    construir_sistema,
+    crear_figura_resultats,
+    generar_topologia,
+    inspect,
+    mo,
+    power_law_channel_from_pa_mm3s,
+    rectangular_channel_from_mm,
+):
+    funcions_documentades = (
+        ("generar_topologia", generar_topologia),
+        ("rectangular_channel_from_mm", rectangular_channel_from_mm),
+        (
+            "power_law_channel_from_pa_mm3s",
+            power_law_channel_from_pa_mm3s,
+        ),
+        ("construir_sistema", construir_sistema),
+        ("avaluar_xarxa", avaluar_xarxa),
+        ("crear_figura_resultats", crear_figura_resultats),
+    )
+    blocs_codi = []
+    for nom_funcio, funcio in funcions_documentades:
+        codi_funcio = inspect.getsource(funcio)
+        blocs_codi.append(
+            f"### `{nom_funcio}`\n\n```python\n{codi_funcio}\n```"
+        )
+
+    mo.md(
+        """
+        # Apèndix: codi complet de les funcions
+
+        A continuació es presenta el codi real executat per aquesta aplicació.
+        Les funcions estan ordenades segons el procediment explicat anteriorment.
+
+        """
+        + "\n\n".join(blocs_codi)
+    )
+    return
+
+
+if __name__ == "__main__":
+    app.run()

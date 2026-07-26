@@ -1,0 +1,6 @@
+marimo==0.23.15
+uv==0.11.32
+numpy
+scipy
+matplotlib
+hn3ttk @ git+https://github.com/ferranlopezEngDev/HN3Ttk.git
