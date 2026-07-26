@@ -262,7 +262,9 @@ def _(mo):
 
         En prémer el botó es crea una instància de `HydraulicSystem`, s'hi
         afegeixen els nodes, les connexions i els links, i es resol el vector
-        d'altures desconegudes amb `solve_scipy_root`.
+        d'altures desconegudes amb el solver propi de **continuació amb
+        Newton-Raphson amortit**:
+        `solve_alpha_continuation_damped_newton`.
 
         La cel·la de codi següent és l'exemple mínim d'ús del repositori:
         rep els paràmetres del formulari i efectua una sola crida a
@@ -323,6 +325,7 @@ def _(avaluacio_web, mo):
         | Altura del canal | {avaluacio_web.altura_canal_mm:.3f} mm |
         | K cel·lular | {avaluacio_web.coeficient_cel_lular_k:.4g} |
         | n cel·lular | {avaluacio_web.exponent_cel_lular_n:.4g} |
+        | Solver | Continuació amb Newton amortit |
         | **Cabal total** | **{avaluacio_web.cabal_entrada_mm3_s:.3f} mm³/s** |
         | Convergència | {estat_convergencia} |
         | Residu màxim | {resultat_web.max_abs_residual:.3e} m³/s |

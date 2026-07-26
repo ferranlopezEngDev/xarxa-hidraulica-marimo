@@ -13,7 +13,10 @@ from pathlib import Path
 from typing import Literal
 
 from hn3ttk.nodes import FixedHeadNode, JunctionNode
-from hn3ttk.solvers import SolverResult, solve_scipy_root
+from hn3ttk.solvers import (
+    SolverResult,
+    solve_alpha_continuation_damped_newton,
+)
 from hn3ttk.system import HydraulicSystem
 
 from channel_connections import (
@@ -603,13 +606,14 @@ def avaluar_xarxa(
             metadata={"solver": "solució_analítica_nul·la"},
         )
     else:
-        resultat = solve_scipy_root(
+        resultat = solve_alpha_continuation_damped_newton(
             sistema,
-            method="hybr",
-            use_jacobian=True,
-            tolerance=1.0e-10,
-            residual_tolerance=1.0e-12,
-            max_function_evaluations=3000,
+            alpha_start=0.0,
+            alpha_end=1.0,
+            alpha_steps=10,
+            tolerance=1.0e-12,
+            step_tolerance=1.0e-12,
+            max_iterations_per_step=100,
         )
     avisos = _revisar_regim(
         topologia,
