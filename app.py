@@ -60,6 +60,11 @@ def _(mo):
         > **Codi font:** primer s'explica tot el procediment de manera
         > conceptual. El codi complet de les funcions utilitzades es presenta
         > a l'apèndix final d'aquesta mateixa llibreta.
+
+        > **Ús de Codex:** s'ha utilitzat Codex com a eina de suport per
+        > preparar i documentar aquesta llibreta. L'objectiu és mostrar un
+        > exemple complet, clar i interactiu de com es pot utilitzar el
+        > repositori **HN3Ttk** en un cas d'estudi real.
         """
     )
     return

@@ -4,6 +4,10 @@ Aplicació Marimo que resol la xarxa amb HN3Ttk directament al navegador.
 Està preparada per publicar-se amb GitHub Pages i no necessita cap servidor
 Python.
 
+S'ha utilitzat Codex com a eina de suport per preparar i documentar aquesta
+llibreta, concebuda com un exemple complet i interactiu d'ús del repositori
+HN3Ttk.
+
 ## Paràmetres interactius
 
 - nombre de files;
