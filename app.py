@@ -214,9 +214,9 @@ def _(mo):
                 label="Nombre de columnes",
             ),
             "salt_h": mo.ui.number(
-                start=0.01,
-                stop=3.0,
-                step=0.05,
+                start=0.0,
+                stop=1.0,
+                step=0.000001,
                 value=1.0,
                 label="Diferència piezomètrica ΔH [m]",
             ),

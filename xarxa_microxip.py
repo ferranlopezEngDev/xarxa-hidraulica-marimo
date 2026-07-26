@@ -134,6 +134,15 @@ def _real_positiu(nom: str, valor: float) -> float:
     return valor
 
 
+def _real_no_negatiu(nom: str, valor: float) -> float:
+    if not isinstance(valor, (int, float)):
+        raise TypeError(f"{nom} ha de ser numèric.")
+    valor = float(valor)
+    if not isfinite(valor) or valor < 0.0:
+        raise ValueError(f"{nom} ha de ser finit i no negatiu.")
+    return valor
+
+
 def crear_perfil_amplades(columnes: int) -> tuple[float, ...]:
     """Amplades dels laterals, ordenades per identificador local.
 
@@ -372,7 +381,7 @@ def construir_sistema(
     exponent_cel_lular_n: float = CELLULAR_EXPONENT_N,
 ) -> HydraulicSystem:
     """Converteix la topologia en nodes, connexions i links d'HN3Ttk."""
-    salt_piezometric_m = _real_positiu(
+    salt_piezometric_m = _real_no_negatiu(
         "salt_piezometric_m",
         salt_piezometric_m,
     )
@@ -579,14 +588,29 @@ def avaluar_xarxa(
         exponent_cel_lular_n=exponent_cel_lular_n,
     )
 
-    resultat = solve_scipy_root(
-        sistema,
-        method="hybr",
-        use_jacobian=True,
-        tolerance=1.0e-10,
-        residual_tolerance=1.0e-12,
-        max_function_evaluations=3000,
-    )
+    if float(diferencia_altura_piezometrica_m) == 0.0:
+        caps_nuls = [0.0] * len(sistema.unknown_head_node_ids())
+        estat_nul = sistema.evaluate_state(caps_nuls)
+        residuals_nuls = estat_nul["residuals"]["vector"]
+        resultat = SolverResult(
+            success=True,
+            message="Estat en repòs: ΔH = 0 i Q = 0.",
+            iterations=0,
+            unknown_heads=caps_nuls,
+            residuals=residuals_nuls,
+            max_abs_residual=float(estat_nul["residuals"]["max_abs"]),
+            state=estat_nul,
+            metadata={"solver": "solució_analítica_nul·la"},
+        )
+    else:
+        resultat = solve_scipy_root(
+            sistema,
+            method="hybr",
+            use_jacobian=True,
+            tolerance=1.0e-10,
+            residual_tolerance=1.0e-12,
+            max_function_evaluations=3000,
+        )
     avisos = _revisar_regim(
         topologia,
         resultat,

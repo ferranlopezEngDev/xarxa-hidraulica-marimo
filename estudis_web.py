@@ -76,18 +76,21 @@ def estudiar_entorn_punt(
     malla de dimensions enteres ``±radi_dimensions``. El punt central es
     calcula una sola vegada i es reutilitza als dos estudis.
     """
-    if salt_m <= 0:
-        raise ValueError("El salt piezomètric ha de ser positiu.")
+    if salt_m < 0:
+        raise ValueError("El salt piezomètric no pot ser negatiu.")
     if not 0 < amplitud_salt_percent < 100:
         raise ValueError("L'amplitud del salt ha d'estar entre 0 i 100%.")
     if radi_dimensions < 1:
         raise ValueError("El radi de dimensions ha de ser com a mínim 1.")
 
     fracció = amplitud_salt_percent / 100.0
-    salts = tuple(
-        salt_m * (1.0 - fracció + 2.0 * fracció * i / 6.0)
-        for i in range(7)
-    )
+    if salt_m == 0.0:
+        salts = tuple(i * 1.0e-6 for i in range(7))
+    else:
+        salts = tuple(
+            salt_m * (1.0 - fracció + 2.0 * fracció * i / 6.0)
+            for i in range(7)
+        )
     valors_files = tuple(range(max(1, files - radi_dimensions), files + radi_dimensions + 1))
     valors_columnes = tuple(
         range(max(1, columnes - radi_dimensions), columnes + radi_dimensions + 1)
